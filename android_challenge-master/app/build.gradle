@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "news.agoda.com.technewssample"
+        minSdkVersion 21
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+task copyResDirectoryToClasses(type: Copy) {
+    from "${projectDir}/src/test/res"
+    into "${buildDir}/intermediates/classes/test/debug/res"
+}
+
+assembleDebug.dependsOn(copyResDirectoryToClasses)
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //Hint: Maybe GSON can help you parse JSON easier?
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.facebook.fresco:fresco:0.3.0'
+    compile 'com.android.support:support-annotations:22.2.0'
+
+    // the following is required to use Mockito and JUnit for your
+    // instrumentation unit tests on the JVM
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'org.mockito:mockito-core:1.9.5'
+    androidTestCompile 'com.android.support.test:runner:0.3'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestCompile('org.skyscreamer:jsonassert:1.2.+') {
+        exclude group: 'org.json'
+    }
+}
